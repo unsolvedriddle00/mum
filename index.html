@@ -860,4 +860,101 @@
             const lowerContent = content.toLowerCase();
 
             for (const [exam, keywords] of Object.entries(examKeywords)) {
-                if (keywords.some(keyword => l
+                if (keywords.some(keyword => lowerContent.includes(keyword))) {
+                    relevantExams.push(exam);
+                }
+            }
+
+            return relevantExams.length ? relevantExams : ['general'];
+        }
+
+        function displayNews(newsArray) {
+            const container = document.getElementById('news-container');
+            container.innerHTML = '';
+
+            const filtered = currentExamFilter === 'all' ? newsArray : newsArray.filter(news =>
+                news.examRelevance.includes(currentExamFilter)
+            );
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="error-message">No news articles match the selected filter.</div>`;
+                return;
+            }
+
+            filtered.forEach(article => {
+                const breaking = article.title.toLowerCase().includes('breaking') || article.description.toLowerCase().includes('breaking');
+
+                container.innerHTML += `
+                    <div class="news-item ${breaking ? 'breaking' : ''}">
+                        <div class="news-title">${article.title}</div>
+                        <div class="news-summary">${article.description}</div>
+                        <div class="news-meta">
+                            <span class="news-source">${article.source.name}</span>
+                            <span class="news-time">${new Date(article.publishedAt).toLocaleString()}</span>
+                            <div class="exam-relevance">
+                                ${article.examRelevance.map(exam => `<span class="exam-tag">${exam.toUpperCase()}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function updateLastUpdatedTime() {
+            const el = document.getElementById('last-updated');
+            el.textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+        }
+
+        function switchNewsSource(source) {
+            currentNewsSource = source;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            loadLiveNews();
+        }
+
+        function filterByExam(exam) {
+            currentExamFilter = exam;
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            displayNews(allNews);
+        }
+
+        function refreshNews() {
+            loadLiveNews();
+        }
+
+        function generateNewQuiz() {
+            currentMCQSet = shuffle([...mcqBank]).slice(0, 3);
+            const mcqSection = document.querySelector('.mcq-section');
+            const html = currentMCQSet.map((mcq, index) => `
+                <div class="mcq-card">
+                    <div class="mcq-header">
+                        <div class="mcq-number">Q${index + 1}</div>
+                        <div class="mcq-difficulty">${mcq.difficulty}</div>
+                    </div>
+                    <div class="mcq-question">${mcq.question}</div>
+                    <ul class="mcq-options">
+                        ${mcq.options.map((opt, i) => `<li onclick="checkAnswer(this, ${i === mcq.correct})">${String.fromCharCode(65 + i)}) ${opt}</li>`).join('')}
+                    </ul>
+                </div>
+            `).join('');
+            mcqSection.querySelectorAll('.mcq-card').forEach(card => card.remove());
+            mcqSection.insertAdjacentHTML('beforeend', html);
+        }
+
+        function checkAnswer(optionEl, isCorrect) {
+            const options = optionEl.parentElement.querySelectorAll('li');
+            options.forEach(opt => opt.classList.remove('correct', 'incorrect'));
+            optionEl.classList.add(isCorrect ? 'correct' : 'incorrect');
+        }
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+    </script>
+</body>
+</html>
