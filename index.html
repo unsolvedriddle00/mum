@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam News Hub - Live SSC, Banking, UPSC News & MCQs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 0, 0, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            margin-left: 1rem;
+            font-size: 0.8rem;
+            color: white;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #ff4444;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        nav a:hover, nav a.active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        main {
+            padding: 2rem 0;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: slideInDown 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: slideInUp 1s ease-out 0.3s both;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeIn 1s ease-out 0.6s both;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .news-section, .mcq-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .last-updated {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            font-weight: normal;
+        }
+
+        .refresh-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: #2ecc71;
+            transform: scale(1.05);
+        }
+
+        .news-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .news-categories {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #3498db;
+            background: white;
+            color: #3498db;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .category-btn.active, .category-btn:hover {
+            background: #3498db;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .news-item {
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #e74c3c;
+            background: #f8f9fa;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .news-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .news-item.breaking {
+            border-left-color: #ff4444;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe6e6 100%);
+        }
+
+        .news-item.breaking::before {
+            content: "🔥 BREAKING";
+            position: absolute;
+            top: -5px;
+            right: 10px;
+            background: #ff4444;
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .news-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+
+        .news-summary {
+            color: #555;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.8rem;
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .news-source {
+            background: #ecf0f1;
+            padding: 0.2rem 0.8rem;
+            border-radius: 15px;
+            font-weight: 500;
+        }
+
+        .news-time {
+            font-style: italic;
+        }
+
+        .exam-relevance {
+            display: flex;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+        }
+
+        .exam-tag {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .mcq-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 1.8rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e9ecef;
+        }
+
+        .mcq-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .mcq-number {
+            background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .mcq-difficulty {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+
+        .mcq-question {
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            color: #2c3e50;
+            font-size: 1.05rem;
+            line-height: 1.4;
+        }
+
+        .mcq-options {
+            list-style: none;
+        }
+
+        .mcq-options li {
+            padding: 0.8rem 1rem;
+            margin: 0.6rem 0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid #e9ecef;
+            font-size: 0.95rem;
+        }
+
+        .mcq-options li:hover {
+            background: #e8f4fd;
+            border-color: #3498db;
+            transform: translateX(5px);
+        }
+
+        .mcq-options li.correct {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .mcq-options li.incorrect {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .exam-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            background: #ecf0f1;
+            color: #2c3e50;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #7f8c8d;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            border: 1px solid #f44336;
+            color: #c62828;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            border: 1px solid #4caf50;
+            color: #2e7d32;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .api-setup {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 1px solid #ffc107;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 1rem 0;
+        }
+
+        .api-setup h3 {
+            color: #856404;
+            margin-bottom: 1rem;
+        }
+
+        .api-setup input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .api-setup button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes slideInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        footer {
+            background: rgba(0,0,0,0.8);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            nav ul {
+                gap: 1rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .news-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .news-categories {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div style="display: flex; align-items: center;">
+                    <div class="logo">📚 Exam News Hub</div>
+                    <div class="live-indicator">
+                        <div class="live-dot"></div>
+                        LIVE
+                    </div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#home" class="active">Home</a></li>
+                        <li><a href="#news">Live News</a></li>
+                        <li><a href="#mcq">MCQ Tests</a></li>
+                        <li><a href="#setup">Setup</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="hero">
+                <h1>Live News & Exam Prep</h1>
+                <p>Real-time Indian news updates and practice questions for SSC, Banking, UPSC, and other competitive exams</p>
+                <div class="cta-buttons">
+                    <a href="#news" class="btn btn-primary">🔴 Live News</a>
+                    <a href="#mcq" class="btn btn-secondary">🧠 Practice MCQs</a>
+                </div>
+            </section>
+
+            <!-- API Setup Section -->
+            <section id="setup" class="api-setup" style="display: none;">
+                <h3>🔧 Setup Live News Feed</h3>
+                <p>To get live news updates, you need a free NewsAPI key:</p>
+                <ol>
+                    <li>Visit <a href="https://newsapi.org" target="_blank">newsapi.org</a> and sign up for free</li>
+                    <li>Copy your API key and paste it below</li>
+                    <li>Click "Save & Load News" to start getting live updates</li>
+                </ol>
+                <input type="text" id="api-key-input" placeholder="Enter your NewsAPI key here...">
+                <button onclick="saveApiKey()">💾 Save & Load News</button>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: #666;">
+                    <strong>Free Plan:</strong> 1000 requests/month • <strong>No credit card required</strong>
+                </p>
+            </section>
+
+            <div class="content-grid">
+                <section class="news-section">
+                    <div class="section-title">
+                        📰 Live Indian News
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <span class="last-updated" id="last-updated">Never updated</span>
+                            <button class="refresh-btn" onclick="refreshNews()" id="refresh-btn">
+                                🔄 Refresh
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="news-controls">
+                        <div class="exam-tabs">
+                            <button class="tab-btn active" onclick="switchNewsSource('general')">🏛️ General</button>
+                            <button class="tab-btn" onclick="switchNewsSource('business')">💼 Business</button>
+                            <button class="tab-btn" onclick="switchNewsSource('technology')">💻 Technology</button>
+                            <button class="tab-btn" onclick="switchNewsSource('health')">🏥 Health</button>
+                        </div>
+                    </div>
+
+                    <div class="news-categories">
+                        <button class="category-btn active" onclick="filterByExam('all')">All News</button>
+                        <button class="category-btn" onclick="filterByExam('upsc')">UPSC</button>
+                        <button class="category-btn" onclick="filterByExam('banking')">Banking</button>
+                        <button class="category-btn" onclick="filterByExam('ssc')">SSC</button>
+                        <button class="category-btn" onclick="filterByExam('railways')">Railways</button>
+                    </div>
+
+                    <div id="news-container">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <p>Loading live news from India...</p>
+                            <p style="font-size: 0.9rem; margin-top: 1rem;">First time? Set up your free API key above! 👆</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mcq-section">
+                    <h2 class="section-title">🧠 Weekly MCQ Mock</h2>
+                    
+                    <div class="mcq-card">
+                        <div class="mcq-header">
+                            <div class="mcq-number">Q1</div>
+                            <div class="mcq-difficulty">⭐⭐ Medium</div>
+                        </div>
+                        <div class="mcq-question">
+                            Which Indian state launched the 'One District One Product' scheme to promote local industries and boost economic growth?
+                        </div>
+                        <ul class="mcq-options">
+                            <li onclick="checkAnswer(this, false)">A) Gujarat</li>
+                            <li onclick="checkAnswer(this, true)">B) Uttar Pradesh</li>
+                            <li onclick="checkAnswer(this, false)">C) Maharashtra</li>
+                            <li onclick="checkAnswer(this, false)">D) Karnataka</li>
+                        </ul>
+                    </div>
+
+                    <div class="mcq-card">
+                        <div class="mcq-header">
+                            <div class="mcq-number">Q2</div>
+                            <div class="mcq-difficulty">⭐⭐⭐ Hard</div>
+                        </div>
+                        <div class="mcq-question">
+                            The recent India-Middle East-Europe Economic Corridor (IMEC) was announced during which international summit?
+                        </div>
+                        <ul class="mcq-options">
+                            <li onclick="checkAnswer(this, true)">A) G20 Summit 2023</li>
+                            <li onclick="checkAnswer(this, false)">B) BRICS Summit 2023</li>
+                            <li onclick="checkAnswer(this, false)">C) SCO Summit 2023</li>
+                            <li onclick="checkAnswer(this, false)">D) ASEAN Summit 2023</li>
+                        </ul>
+                    </div>
+
+                    <div class="mcq-card">
+                        <div class="mcq-header">
+                            <div class="mcq-number">Q3</div>
+                            <div class="mcq-difficulty">⭐ Easy</div>
+                        </div>
+                        <div class="mcq-question">
+                            What is the current repo rate set by the Reserve Bank of India as of 2025?
+                        </div>
+                        <ul class="mcq-options">
+                            <li onclick="checkAnswer(this, false)">A) 6.00%</li>
+                            <li onclick="checkAnswer(this, true)">B) 6.50%</li>
+                            <li onclick="checkAnswer(this, false)">C) 7.00%</li>
+                            <li onclick="checkAnswer(this, false)">D) 5.50%</li>
+                        </ul>
+                    </div>
+
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="generateNewQuiz()">
+                        🔄 Generate New Quiz
+                    </button>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Exam News Hub - Live News for Competitive Exams</p>
+            <p>Real-time updates • Weekly MCQs • Exam-focused content</p>
+        </div>
+    </footer>
+
+    <script>
+        // Configuration
+        let API_KEY = '';
+        let currentNewsSource = 'general';
+        let currentExamFilter = 'all';
+        let allNews = [];
+
+        // Advanced MCQ question bank
+        const mcqBank = [
+            {
+                question: "Which committee was formed to review the electoral bonds scheme in India?",
+                options: ["Justice B.V. Nagarathna Committee", "Justice D.Y. Chandrachud Committee", "Justice A.M. Khanwilkar Committee", "Justice S.A. Bobde Committee"],
+                correct: 0,
+                difficulty: "⭐⭐⭐ Hard",
+                examRelevance: ["UPSC", "SSC"]
+            },
+            {
+                question: "The 'Pradhan Mantri Suraksha Bima Yojana' provides accidental death coverage of how much amount?",
+                options: ["₹1 lakh", "₹2 lakh", "₹3 lakh", "₹5 lakh"],
+                correct: 1,
+                difficulty: "⭐⭐ Medium",
+                examRelevance: ["Banking", "SSC", "Railways"]
+            },
+            {
+                question: "Which Indian city hosted the G20 Finance Ministers and Central Bank Governors meeting in 2023?",
+                options: ["New Delhi", "Mumbai", "Bengaluru", "Gandhinagar"],
+                correct: 3,
+                difficulty: "⭐⭐ Medium",
+                examRelevance: ["UPSC", "Banking"]
+            },
+            {
+                question: "The 'Digital India Land Records Modernization' program is implemented under which ministry?",
+                options: ["Ministry of Electronics & IT", "Ministry of Rural Development", "Ministry of Housing & Urban Affairs", "Ministry of Agriculture"],
+                correct: 1,
+                difficulty: "⭐⭐⭐ Hard",
+                examRelevance: ["UPSC", "SSC"]
+            },
+            {
+                question: "Which Indian port is being developed as a transshipment hub under the Sagarmala project?",
+                options: ["Vizhinjam Port", "Paradip Port", "Kandla Port", "Tuticorin Port"],
+                correct: 0,
+                difficulty: "⭐⭐ Medium",
+                examRelevance: ["UPSC", "Railways"]
+            }
+        ];
+
+        let currentMCQSet = [];
+        let mcqIndex = 0;
+
+        // Exam relevance keywords for filtering news
+        const examKeywords = {
+            'upsc': ['government', 'policy', 'ministry', 'supreme court', 'parliament', 'constitution', 'international relations', 'defense', 'environment'],
+            'banking': ['rbi', 'reserve bank', 'monetary policy', 'inflation', 'gdp', 'economic', 'finance', 'budget', 'banking', 'credit'],
+            'ssc': ['recruitment', 'employment', 'government jobs', 'psu', 'public sector', 'examination', 'notification'],
+            'railways': ['railway', 'transport', 'infrastructure', 'metro', 'indian railways', 'logistics']
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStoredApiKey();
+            generateNewQuiz();
+            
+            // Try to load news immediately if API key exists
+            if (API_KEY) {
+                loadLiveNews();
+            } else {
+                showApiSetup();
+            }
+        });
+
+        function loadStoredApiKey() {
+            // In a real application, you might store this more securely
+            const stored = prompt("Enter your NewsAPI key (get free at newsapi.org):");
+            if (stored && stored.trim()) {
+                API_KEY = stored.trim();
+                hideApiSetup();
+            }
+        }
+
+        function saveApiKey() {
+            const input = document.getElementById('api-key-input');
+            const key = input.value.trim();
+            
+            if (!key) {
+                alert('Please enter your API key');
+                return;
+            }
+            
+            API_KEY = key;
+            hideApiSetup();
+            showSuccessMessage('API key saved! Loading live news...');
+            loadLiveNews();
+        }
+
+        function showApiSetup() {
+            document.getElementById('setup').style.display = 'block';
+        }
+
+        function hideApiSetup() {
+            document.getElementById('setup').style.display = 'none';
+        }
+
+        function showSuccessMessage(message) {
+            const container = document.getElementById('news-container');
+            container.innerHTML = `<div class="success-message">${message}</div>` + container.innerHTML;
+        }
+
+        function showErrorMessage(message) {
+            const container = document.getElementById('news-container');
+            container.innerHTML = `<div class="error-message">${message}</div>`;
+        }
+
+        async function loadLiveNews() {
+            if (!API_KEY) {
+                showApiSetup();
+                return;
+            }
+
+            const container = document.getElementById('news-container');
+            container.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Fetching latest news from India...</p>
+                </div>
+            `;
+
+            try {
+                const response = await fetch(`https://newsapi.org/v2/top-headlines?country=in&category=${currentNewsSource}&pageSize=20&apiKey=${API_KEY}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.status === 'error') {
+                    throw new Error(data.message || 'API Error');
+                }
+
+                allNews = data.articles.filter(article => 
+                    article.title && 
+                    article.description && 
+                    article.title !== '[Removed]'
+                ).map(article => ({
+                    ...article,
+                    examRelevance: determineExamRelevance(article.title + ' ' + article.description)
+                }));
+
+                displayNews(allNews);
+                updateLastUpdatedTime();
+                
+            } catch (error) {
+                console.error('Error loading news:', error);
+                showErrorMessage(`Failed to load news: ${error.message}. Please check your API key and internet connection.`);
+            }
+        }
+
+        function determineExamRelevance(content) {
+            const relevantExams = [];
+            const lowerContent = content.toLowerCase();
+
+            for (const [exam, keywords] of Object.entries(examKeywords)) {
+                if (keywords.some(keyword => l
